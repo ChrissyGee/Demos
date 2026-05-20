@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+
+# Virtual envs
+.venv/
+venv/
+env/
+.env
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Streamlit local secrets (NEVER commit these)
+.streamlit/secrets.toml
+
+# Local artefacts the apps may create
+*.zip
+*.pdf.tmp
