@@ -1,0 +1,20 @@
+Create a complete, self-contained Streamlit MVP for an AI-powered Inventory Management demo that matches this architecture:
+
+- Chat interface for user questions
+- Lead Agent that monitors/updates inventory in real time
+- Real-time Inventory Display + Metrics panel
+- Assistant Agent with tools (simulated weather, social trends, demand patterns, supply chain)
+- Console that shows the LLM's reasoning step-by-step
+
+Requirements:
+- Use only: streamlit, pandas, numpy, random, sklearn (for simple forecasting), openai (or simulate with dummy responses if no key)
+- Fake data: products with stock levels, historical demand, current weather/social signals
+- Lead Agent logic: every few seconds (use st.session_state + st.rerun or button) it "analyzes" demand signals and suggests replenishment
+- Show live updates in the inventory table and metrics (stockouts avoided, holding cost savings)
+- Console sidebar shows the agent's thought process (step-by-step reasoning)
+- Simple sklearn linear model or moving average for demand forecasting
+- Clean code with detailed comments, sections, and docstrings following CodeAcademy best practices
+- Professional UI with tabs: Dashboard, Chat, Console, Integration Steps
+- Include placeholder "Connect to real APIs" section
+
+Output the full app.py code ready to run with `streamlit run app.py`. Add clear comments explaining every major section.

@@ -1,0 +1,21 @@
+Create a complete, self-contained Streamlit MVP for Vibe Code Productionizing tool based on the diagram:
+
+Flow:
+1. Folder uploader (simulate with multiple file uploads or zip simulation via text area)
+2. Code Analyzer Agent (uses AI detection, optimization suggestions, vulnerability check simulation)
+3. Generates report with planned changes
+4. User approves changes
+5. Agent applies updates (simple string/code transformations)
+6. Sandbox testing ground (run simple code snippets safely with exec in restricted context or dummy tests)
+7. Download hardened folder/code
+
+Features:
+- Upload vibe-coded Python snippets/files
+- AI Agent analyzes for best practices, security, efficiency (use openai or rule-based + LLM)
+- Shows before/after diff
+- Evaluation loop simulation
+- Final downloadable hardened code
+
+Use only streamlit, pandas (optional), openai. Keep code simple and safe. Detailed comments and docstrings. Professional UI with steps wizard style.
+
+Output full app.py ready to run.

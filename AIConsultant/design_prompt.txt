@@ -1,0 +1,38 @@
+Create a complete, self-contained Streamlit MVP for an AI Business Consulting Agent that guides users through a structured seven-step consulting process and produces a full downloadable engagement document.
+
+Flow:
+1. Client Intake Form — collect business name, industry, company size, planning horizon, strategic goals, current AI landscape, pain points, desired outcomes, and bottlenecks
+2. AI Landscape Assessment (Step 1) — map existing AI tools in production, governance notes, data sources, and effectiveness observations
+3. Opportunity Identification (Step 2) — extract explicit pain points and latent opportunities from free-text intake using keyword heuristics
+4. Industry & Competitor Research (Step 3) — simulated web search snippets + RAG retrieval over a pre-loaded case-bank of AI adoption benchmarks
+5. Driver Tree Root-Cause Analysis (Step 4) — decompose each pain point into standard operational root drivers (wait time, rework, manual work, approval bottlenecks)
+6. Business Acumen Prioritisation (Step 5) — score each opportunity on impact × feasibility with ROI bands (Quick/Medium/Long), output as sortable DataFrame
+7. Pyramid Principle Recommendations (Step 6) — headline answer first, then three supporting arguments grounded in driver tree + research + priority table
+8. FAST Implementation Plan (Step 7) — Frequency, Accountability, Scorecard, Timing + risk mitigation, change management, training, data readiness, and scaling notes
+9. Validation guardrails — flag missing sections, headline not citing a top-3 opportunity, and unverified dollar figures in narrative text
+
+Features:
+- Chat-based refinement loop: user can ask the consultant to rework any section by name
+- Download full engagement document as formatted Markdown
+- Reasoning console in sidebar: append-only log showing each step's reasoning with timestamps
+- Offline/deterministic mode: structured template fallback for every LLM call when no OpenAI key is available — the app never fails silently
+- Hallucination guardrail: monetary figures in generated narrative must trace back to intake text
+
+Architecture (matches whiteboard sketch):
+- Chat User → Lead Consultant Agent (follows script, enforces step order) → Toolbelt
+- Tools: Web Search (simulated/deterministic), RAG (pre-loaded corpus), Driver Tree, Prioritisation, Document Filler
+- Console (reasoning display) runs in sidebar throughout
+
+Use only: streamlit, pandas, openai (optional, graceful fallback), os, re, json, random, datetime, typing. No other external dependencies.
+
+UI Tabs: Client Intake | Engagement Runner | Results | Integration Guide
+Sidebar: OpenAI API key input (session-only, password field) + Reasoning Console with clear button
+
+Code quality:
+- One pure function per tool and consulting step — testable independently
+- Clear docstrings on every function explaining inputs, outputs, and design decisions
+- Deterministic fallback strings for every LLM path
+- No step can run without its prerequisites (enforced in the runner)
+- Guardrails explicitly documented in code comments
+
+Output the full, well-commented app.py code ready to run with `streamlit run app.py`. Add a short README-style docstring at the top of the file.

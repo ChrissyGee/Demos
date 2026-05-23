@@ -1,0 +1,19 @@
+Create a complete, self-contained Streamlit MVP for AI Marketing Campaign Generator that follows this flow:
+
+- Chat interface
+- Lead Consultant Agent that follows a "marketing campaign generation script"
+- Tools: web search simulation (dummy), RAG (pre-loaded examples), document generation
+- Outputs a full professional marketing campaign document (strategy, creatives, channels, metrics, timeline)
+
+Requirements:
+- Input: business name, target audience, goals, budget (form)
+- Lead Agent uses structured prompting (show steps: understand brief → research → generate assets → validation)
+- Generate sections: Campaign Objective, Audience Personas, Key Messages, Creative Concepts, Channel Plan, Budget Allocation, KPIs
+- Use openai (or dummy responses) + simple templates
+- Option to "refine" via chat
+- Download full campaign as markdown/PDF-ready text
+- Console showing consultant's reasoning process
+
+Use only allowed libraries: streamlit, pandas (for any data), openai. Follow CodeAcademy practices: clear agent steps, guardrails against hallucination, modular functions, detailed comments.
+
+Output full app.py with professional UI and tabs: Brief Input, Campaign Generator, Results, Integration Guide.

@@ -1,0 +1,19 @@
+Create a complete, self-contained Streamlit MVP for Document Review and Generation Agent matching this architecture:
+
+- Chat interface
+- Document Agent
+- Tools: generate live docs, edit live docs, create forms, RAG, fill forms, review doc
+
+Capabilities:
+- Upload documents (PDF/text/CSV simulation via text or files)
+- Natural language instructions: "fill this form", "generate report from data", "review for compliance", "extract key info", "create summary"
+- Show step-by-step reasoning console
+- Live editable document preview (use st.text_area or simple markdown)
+- Form filling simulation with templates
+- Generate professional outputs (contracts, reports, summaries)
+
+Use only: streamlit, pandas, openai (for LLM actions). Follow agentic best practices with visible reasoning steps.
+
+UI tabs: Upload & Chat, Live Document, Agent Console, Generated Outputs, Integration Steps.
+
+Output the full, well-commented app.py code.

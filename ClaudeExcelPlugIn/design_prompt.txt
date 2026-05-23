@@ -1,0 +1,43 @@
+Create a complete, self-contained Streamlit MVP that serves as an interactive step-by-step guide for setting up the Claude for Excel plug-in. The app must be professional, clean, and suitable as a demo on an AI consulting website.
+
+Key Requirements:
+- Use ONLY these libraries: streamlit, pandas (for any tables or data display). No other external dependencies. Keep code simple and follow CodeAcademy AI Engineer course best practices: modular functions, clear comments, docstrings, error handling, and professional structure.
+- Sidebar switch: Add a sidebar section titled "Guide Mode" with a radio button or selectbox allowing users to switch between:
+  - "Text Explanations" (default)
+  - "Video Setup Guide"
+- When "Text Explanations" is selected:
+  - Main content shows structured, step-by-step setup instructions pulled from official Claude support information.
+  - Use tabs or clear sections: Overview, For Individuals, For Businesses / Admins, After Installation (Usage), Best Practices & Limitations.
+  - Present steps in numbered lists or st.expander sections for readability.
+  - Include a simple interactive checklist (using st.checkbox) so users can track their progress through the setup steps.
+  - Add a table for Supported Excel Versions.
+  - Include brief feature highlights and value proposition at the top.
+- When "Video Setup Guide" is selected:
+  - Show a dedicated video section with:
+    - Placeholder or simulated video player area (use st.video with a public YouTube link if appropriate, or clear instructions + embedded link buttons).
+    - Recommended official/community setup videos with direct links and short descriptions of what each covers.
+    - Text summary of key points typically shown in setup videos.
+    - Note that in a production deployment this section can embed the actual video.
+- Overall UI:
+  - Clean header with title "Claude for Excel Plug-in Setup Guide" and subtitle explaining it helps businesses/individuals integrate AI into spreadsheets.
+  - Professional styling with sections, expanders, and clear visual hierarchy.
+  - Footer or sidebar note: "This is a demo guide. For the latest official instructions, visit the Claude Help Center."
+  - Optional small interactive element: "Quick Setup Simulator" or FAQ accordion.
+- Content must accurately reflect real information:
+  - Supported versions and platforms.
+  - Individual installation steps (Microsoft Marketplace).
+  - Business/Admin deployment (Microsoft 365 Admin Center, custom manifest XML option).
+  - Post-installation: signing in, accessing via ribbon, core capabilities.
+  - Limitations, best practices, and security notes (prompt injection caution, review changes, etc.).
+  - Mention available plans (Pro, Max, Team, Enterprise) and model options.
+- Make the generated code well-documented with inline comments explaining each major section and function. Add a short README-style docstring at the top of the file.
+- Output the full ready-to-run `app.py` code. The app should run with `streamlit run app.py` with no additional setup.
+
+Structure the code professionally:
+- Import section with comments
+- Helper functions for checklist, tables, etc.
+- Main layout with sidebar mode switch
+- Conditional rendering based on selected mode
+- Clear separation of Individual vs Business flows
+
+Ensure the final app feels educational, trustworthy, and directly useful for someone wanting to deploy Claude in Excel for themselves or their organization.

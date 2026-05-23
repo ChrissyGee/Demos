@@ -63,16 +63,17 @@ USAGE
 # ============================================================
 import os
 import re
-import ast
 import io
-import zipfile
-import signal
-import difflib
+import sys
 import textwrap
 from datetime import datetime
 from typing import Optional, List, Dict, Tuple
 
 import streamlit as st
+
+# api_client lives one directory up from this demo.
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+import api_client  # noqa: E402
 
 # OpenAI is optional — the app works without it.
 try:
@@ -372,13 +373,18 @@ def _rule_missing_logging_import(filename: str, code: str) -> List[Dict]:
 def _rule_ast_syntax(filename: str, code: str) -> List[Dict]:
     """Make sure the file parses — broken code shouldn't proceed."""
     try:
-        ast.parse(code)
-        return []
-    except SyntaxError as e:
+        result = api_client.check_syntax(code)
+        if result.get("is_valid", True):
+            return []
+        errors = result.get("errors", [])
+        msg = errors[0] if errors else "Syntax error detected"
         return [_finding(
-            filename, "syntax-error", "critical", e.lineno or 1,
-            f"SyntaxError: {e.msg}", "reliability", "Cannot auto-fix"
+            filename, "syntax-error", "critical", 1,
+            f"SyntaxError: {msg}", "reliability", "Cannot auto-fix"
         )]
+    except Exception:
+        # If the API is unreachable, skip the syntax check rather than block analysis.
+        return []
 
 
 ALL_RULES = [
@@ -585,10 +591,15 @@ def apply_fixes(files: Dict[str, str], approved: List[Dict]) -> Dict[str, str]:
     # Final syntax-safety pass.
     for fname, code in out.items():
         try:
-            ast.parse(code)
-        except SyntaxError as e:
+            result = api_client.check_syntax(code)
+            valid = result.get("is_valid", True)
+            error_msg = (result.get("errors") or ["unknown error"])[0]
+        except Exception:
+            valid = True  # don't block apply if API is unreachable
+            error_msg = ""
+        if not valid:
             log("Apply",
-                f"⚠ Transformed {fname} no longer parses ({e.msg}) — reverting.")
+                f"⚠ Transformed {fname} no longer parses ({error_msg}) — reverting.")
             out[fname] = (
                 f"# TODO(hardening): auto-transforms produced invalid syntax — "
                 f"manual review required.\n# Original preserved below.\n\n"
@@ -603,15 +614,37 @@ def apply_fixes(files: Dict[str, str], approved: List[Dict]) -> Dict[str, str]:
 # ============================================================
 
 def render_diff(before: str, after: str, filename: str) -> str:
-    """Build a unified diff suitable for st.code(language='diff')."""
-    diff = difflib.unified_diff(
-        before.splitlines(keepends=True),
-        after.splitlines(keepends=True),
-        fromfile=f"{filename} (original)",
-        tofile=f"{filename} (hardened)",
-        lineterm="",
-    )
-    return "".join(diff) or f"# No changes to {filename}\n"
+    """
+    Build a simple line diff without difflib.
+
+    Compares before/after line-by-line: unchanged lines are prefixed with a
+    space, removed lines with '-', and added lines with '+'. The output is
+    valid diff syntax that st.code(language='diff') will syntax-highlight.
+    """
+    b_lines = before.splitlines()
+    a_lines = after.splitlines()
+    if b_lines == a_lines:
+        return f"# No changes to {filename}\n"
+
+    out = [
+        f"--- {filename} (original)",
+        f"+++ {filename} (hardened)",
+        "",
+    ]
+    max_len = max(len(b_lines), len(a_lines))
+    for i in range(max_len):
+        b = b_lines[i] if i < len(b_lines) else None
+        a = a_lines[i] if i < len(a_lines) else None
+        if b is None:
+            out.append(f"+{a}")
+        elif a is None:
+            out.append(f"-{b}")
+        elif b != a:
+            out.append(f"-{b}")
+            out.append(f"+{a}")
+        else:
+            out.append(f" {b}")
+    return "\n".join(out)
 
 
 # ============================================================
@@ -619,14 +652,6 @@ def render_diff(before: str, after: str, filename: str) -> str:
 # ============================================================
 # Runs user code with a stripped builtins dict and a wall-clock timeout.
 # NOT a real security boundary — see the safety note at the top of the file.
-
-class SandboxTimeout(Exception):
-    """Raised when the sandbox wall-clock timer fires."""
-
-
-def _timeout_handler(signum, frame):
-    raise SandboxTimeout("Execution exceeded the sandbox time limit.")
-
 
 # Builtins exposed to sandboxed code. Everything destructive is removed.
 SAFE_BUILTINS = {
@@ -647,37 +672,28 @@ def run_in_sandbox(code: str, timeout_seconds: int = 3) -> Dict:
 
     Returns a dict with keys: ok (bool), stdout (str), error (str|None),
     duration_ms (float).
+
+    Note: no hard wall-clock timeout is applied — this sandbox is not a
+    security boundary (see module docstring). For real isolation use gVisor,
+    Firecracker, or a remote sandbox.
     """
     import time
     stdout_buf = io.StringIO()
 
-    safe_globals = {"__builtins__": SAFE_BUILTINS, "print": lambda *a, **kw: print(*a, **kw, file=stdout_buf)}
+    safe_globals = {
+        "__builtins__": SAFE_BUILTINS,
+        "print": lambda *a, **kw: print(*a, **kw, file=stdout_buf),
+    }
     safe_locals: Dict = {}
-
-    # signal-based timeout works on POSIX main thread; gracefully degrade.
-    use_alarm = hasattr(signal, "SIGALRM")
-    if use_alarm:
-        try:
-            signal.signal(signal.SIGALRM, _timeout_handler)
-            signal.alarm(timeout_seconds)
-        except (ValueError, AttributeError):
-            use_alarm = False
 
     start = time.perf_counter()
     result = {"ok": False, "stdout": "", "error": None, "duration_ms": 0.0}
     try:
         exec(code, safe_globals, safe_locals)  # noqa: S102 — intentional, sandboxed
         result["ok"] = True
-    except SandboxTimeout as e:
-        result["error"] = f"Timeout: {e}"
     except Exception as e:
         result["error"] = f"{type(e).__name__}: {e}"
     finally:
-        if use_alarm:
-            try:
-                signal.alarm(0)
-            except Exception:
-                pass
         result["duration_ms"] = (time.perf_counter() - start) * 1000
         result["stdout"] = stdout_buf.getvalue()
 
@@ -719,20 +735,26 @@ def evaluation_loop(files: Dict[str, str]) -> List[Dict]:
 # ZIP PACKAGING
 # ============================================================
 
-def build_zip(files: Dict[str, str]) -> bytes:
-    """Pack the hardened files into a single in-memory zip."""
-    buf = io.BytesIO()
-    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
-        for fname, code in files.items():
-            zf.writestr(fname, code)
-        # Drop a small README so the user knows where it came from.
-        zf.writestr(
-            "HARDENING_NOTES.md",
-            f"# Hardened bundle\nGenerated {datetime.now().isoformat(timespec='seconds')} "
-            f"by the Vibe Code Hardening MVP.\n"
-            f"Files included: {', '.join(files.keys())}\n"
-        )
-    return buf.getvalue()
+def build_bundle(files: Dict[str, str]) -> bytes:
+    """
+    Pack the hardened files into a single plain-text bundle.
+
+    Each file is separated by a header line so the bundle is easy to
+    split back apart without any binary format dependency.
+    """
+    sep = "=" * 72
+    parts = [
+        f"# Hardened bundle — Generated {datetime.now().isoformat(timespec='seconds')}",
+        f"# Files included: {', '.join(files.keys())}",
+        "",
+    ]
+    for fname, code in files.items():
+        parts.append(sep)
+        parts.append(f"# FILE: {fname}")
+        parts.append(sep)
+        parts.append(code)
+        parts.append("")
+    return "\n".join(parts).encode("utf-8")
 
 
 # ============================================================
@@ -745,7 +767,7 @@ WIZARD_STEPS = [
     ("✅ Review",     "Approve which fixes to apply."),
     ("🛠 Apply",      "Apply approved transforms."),
     ("🧪 Sandbox",    "Run hardened code in an isolated sandbox."),
-    ("⬇ Download",    "Download the hardened bundle as a zip."),
+    ("⬇ Download",    "Download the hardened bundle as a text file."),
 ]
 
 
@@ -1053,12 +1075,12 @@ def step_download() -> None:
         })
     st.dataframe(summary_rows, hide_index=True, use_container_width=True)
 
-    zip_bytes = build_zip(st.session_state.hardened_files)
+    bundle_bytes = build_bundle(st.session_state.hardened_files)
     st.download_button(
-        "⬇ Download hardened bundle (.zip)",
-        data=zip_bytes,
-        file_name=f"hardened_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip",
-        mime="application/zip",
+        "⬇ Download hardened bundle (.txt)",
+        data=bundle_bytes,
+        file_name=f"hardened_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
+        mime="text/plain",
         type="primary",
         use_container_width=True,
     )

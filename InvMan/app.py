@@ -31,8 +31,8 @@ KEY IDEAS
       replenishment based on tool-augmented forecasts from the Assistant Agent.
     * The Console captures the agent's step-by-step reasoning so the user
       can see *why* the system is acting.
-    * Forecasts use a sklearn LinearRegression model trained on synthetic
-      historical demand (plus a moving-average fallback).
+    * Forecasts use numpy polyfit (degree-1 linear regression) trained on
+      synthetic historical demand (plus a moving-average fallback).
     * If an OPENAI_API_KEY is present, the Chat tab uses OpenAI; otherwise
       it falls back to a deterministic rule-based responder so the demo
       always runs.
@@ -54,7 +54,6 @@ from typing import Dict, List, Optional
 import numpy as np
 import pandas as pd
 import streamlit as st
-from sklearn.linear_model import LinearRegression
 
 # OpenAI is optional — the app works without an API key.
 try:
@@ -238,9 +237,10 @@ def forecast_demand(history: pd.DataFrame, horizon_days: int = 7) -> float:
     """
     Predict total demand for the next `horizon_days` days.
 
-    Uses a small sklearn LinearRegression on the historical series. If there
-    are too few points (e.g. early in the simulation), falls back to a
-    7-day moving average — a common technique in retail forecasting.
+    Uses numpy polyfit (degree-1 polynomial) for linear regression on the
+    historical series. If there are too few points (e.g. early in the
+    simulation), falls back to a 7-day moving average — a common technique
+    in retail forecasting.
 
     Parameters
     ----------
@@ -260,12 +260,11 @@ def forecast_demand(history: pd.DataFrame, horizon_days: int = 7) -> float:
         # Not enough data — use a simple moving average.
         return float(max(0, np.mean(series[-7:]) * horizon_days))
 
-    X = np.arange(len(series)).reshape(-1, 1)
-    y = series
-    model = LinearRegression().fit(X, y)
+    X = np.arange(len(series))
+    coeffs = np.polyfit(X, series, 1)   # degree-1 polynomial = linear regression
 
-    future_X = np.arange(len(series), len(series) + horizon_days).reshape(-1, 1)
-    predictions = model.predict(future_X)
+    future_X = np.arange(len(series), len(series) + horizon_days)
+    predictions = np.polyval(coeffs, future_X)
     return float(max(0, predictions.sum()))
 
 
@@ -364,7 +363,7 @@ def lead_agent_tick() -> None:
     For each SKU it:
         1. Simulates a day's sales (depleting stock).
         2. Calls the Assistant Agent's tools to gather signals.
-        3. Combines a sklearn forecast with the signal multipliers.
+        3. Combines a polyfit forecast with the signal multipliers.
         4. Decides whether to place a replenishment order.
         5. Logs every step to the console for transparency.
     """
@@ -762,7 +761,7 @@ def render_integration() -> None:
         scorecard service (e.g. project44, FourKites).
 
         ### 5. Demand forecasting
-        The current `LinearRegression` is intentionally simple. Production
+        The current `np.polyfit` linear model is intentionally simple. Production
         alternatives:
         - Prophet for seasonality
         - LightGBM / XGBoost with engineered features
