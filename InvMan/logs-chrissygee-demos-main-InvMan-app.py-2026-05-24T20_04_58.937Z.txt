@@ -1,0 +1,270 @@
+
+[     UTC     ] Logs for invman.streamlit.app/
+────────────────────────────────────────────────────────────────────────────────────────
+[20:02:47] 🖥 Provisioning machine...
+[20:02:54] 🎛 Preparing system...
+[20:03:01] ⛓ Spinning up manager process...
+[20:02:52] 🚀 Starting up repository: 'demos', branch: 'main', main module: 'InvMan/app.py'
+[20:02:52] 🐙 Cloning repository...
+[20:02:52] 🐙 Cloning into '/mount/src/demos'...
+
+[20:02:53] 🐙 Cloned repository!
+[20:02:53] 🐙 Pulling code changes from Github...
+[20:02:53] 📦 Processing dependencies...
+
+──────────────────────────────────────── uv ───────────────────────────────────────────
+
+Using uv pip install.
+Using Python 3.14.5 environment at /home/adminuser/venv
+Resolved 53 packages in 664ms
+Prepared 53 packages in 1.86s
+Installed 53 packages in 463ms
+ + altair==6.1.0
+ + annotated-types==0.7.0
+ + anyio==4.13.0
+ + attrs==26.1.0
+ + blinker==1.9.0
+ + cachetools==7.1.4
+ + certifi==2026.5.20[2026-05-24 20:02:56.708973] 
+ + charset-normalizer==3.4.7
+ + click==8.4.1
+ + distro==1.9.0[2026-05-24 20:02:56.709145] 
+ + gitdb==4.0.12
+ + gitpython==3.1.50[2026-05-24 20:02:56.709347] 
+ + h11==0.16.0
+ [2026-05-24 20:02:56.709593] + httpcore==1.0.9
+ + [2026-05-24 20:02:56.709853] httptools==0.7.1
+ + httpx==[2026-05-24 20:02:56.709978] 0.28.1
+ + idna==3.16
+ + itsdangerous==2.2.0
+ + jinja2==3.1.6
+ + jiter==0.15.0
+ + jsonschema==4.26.0
+ + jsonschema-specifications==2025.9.1
+ +[2026-05-24 20:02:56.710224]  markupsafe==3.0.3
+ + narwhals==2.21.2
+ + numpy==2.4.6
+ + openai==2.38.0[2026-05-24 20:02:56.710295] 
+ + packaging==26.2
+ + pandas==3.0.3
+ + pillow==12.2.0
+ + [2026-05-24 20:02:56.710367] protobuf==7.35.0
+ + pyarrow==24.0.0
+ + pydantic==2.13.4
+ + pydantic-core==2.46.4
+ + pydeck==0.9.2
+ + python-dateutil==2.9.0.post0
+ + python-multipart==0.0.29
+ + [2026-05-24 20:02:56.710571] referencing==0.37.0
+ + requests==2.34.2
+ + rpds-py==0.30.0
+ + six==1.17.0[2026-05-24 20:02:56.710662] 
+ + smmap==5.0.3
+ + sniffio==1.3.1
+ + starlette==1.1.0
+ + streamlit==1.57.0
+ + tenacity==9.1.4
+ + toml==0.10.2
+ + tqdm==4.67.3
+ + typing-extensions==4.15.0
+ + typing-inspection==0.4.2
+ + urllib3==2.7.0[2026-05-24 20:02:56.710797] 
+ + uvicorn==0.48.0
+ + watchdog==6.0.0
+ + websockets[2026-05-24 20:02:56.710862] ==16.0
+Checking if Streamlit is installed
+Found Streamlit version 1.57.0 in the environment
+Installing rich for an improved exception logging
+Using uv pip install.
+Using Python 3.14.5 environment at /home/adminuser/venv
+Resolved 4 packages in 123ms
+Prepared 4 packages in 121ms
+Installed 4 packages in 12ms
+ +[2026-05-24 20:02:58.657376]  markdown-it-py==4.2.0
+ + mdurl==0.1.2
+ + pygments==2.20.0
+ + rich==15.0.0
+
+────────────────────────────────────────────────────────────────────────────────────────
+
+[20:02:59] 🐍 Python dependencies were installed from /mount/src/demos/InvMan/requirements.txt using uv.
+Check if streamlit is installed
+Streamlit is already installed
+[20:03:00] 📦 Processed dependencies!
+2026-05-24 20:03:02.593 Uvicorn server started on 0.0.0.0:8501
+
+
+
+2026-05-24 20:03:08.701 Please replace `use_container_width` with `width`.
+
+`use_container_width` will be removed after 2025-12-31.
+
+For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'`.
+2026-05-24 20:03:10.053 Please replace `use_container_width` with `width`.
+
+`use_container_width` will be removed after 2025-12-31.
+
+For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'` or specify an integer width.
+2026-05-24 20:03:10.561 Please replace `use_container_width` with `width`.
+
+`use_container_width` will be removed after 2025-12-31.
+
+For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'`.
+2026-05-24 20:03:10.687 Please replace `use_container_width` with `width`.
+
+`use_container_width` will be removed after 2025-12-31.
+
+For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'` or specify an integer width.
+2026-05-24 20:03:12.983 Please replace `use_container_width` with `width`.
+
+`use_container_width` will be removed after 2025-12-31.
+
+For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'`.
+2026-05-24 20:03:13.087 Please replace `use_container_width` with `width`.
+
+`use_container_width` will be removed after 2025-12-31.
+
+For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'` or specify an integer width.
+2026-05-24 20:03:53.876 Please replace `use_container_width` with `width`.
+
+`use_container_width` will be removed after 2025-12-31.
+
+For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'`.
+────────────────────── Traceback (most recent call last) ───────────────────────
+  /home/adminuser/venv/lib/python3.14/site-packages/streamlit/runtime/scriptru  
+  nner/exec_code.py:129 in exec_func_with_error_handling                        
+                                                                                
+  /home/adminuser/venv/lib/python3.14/site-packages/streamlit/runtime/scriptru  
+  nner/script_runner.py:689 in code_to_exec                                     
+                                                                                
+  /mount/src/demos/InvMan/app.py:843 in <module>                                
+                                                                                
+    840                                                                         
+    841                                                                         
+    842 if __name__ == "__main__":                                              
+  ❱ 843 │   main()                                                              
+    844                                                                         
+                                                                                
+  /mount/src/demos/InvMan/app.py:833 in main                                    
+                                                                                
+    830 │   )                                                                   
+    831 │                                                                       
+    832 │   with tab_dashboard:                                                 
+  ❱ 833 │   │   render_dashboard()                                              
+    834 │   with tab_chat:                                                      
+    835 │   │   render_chat()                                                   
+    836 │   with tab_console:                                                   
+                                                                                
+  /mount/src/demos/InvMan/app.py:647 in render_dashboard                        
+                                                                                
+    644 │   forecast_total = forecast_demand(hist, horizon_days=7)              
+    645 │   forecast_daily = forecast_total / 7.0                               
+    646 │   future_dates = pd.date_range(                                       
+  ❱ 647 │   │   start=hist["date"].max() + timedelta(days=1), periods=7         
+    648 │   )                                                                   
+    649 │   forecast_df = pd.DataFrame({                                        
+    650 │   │   "date": future_dates,                                           
+                                                                                
+  /home/adminuser/venv/lib/python3.14/site-packages/pandas/util/_decorators.py  
+  :336 in wrapper                                                               
+                                                                                
+    333 │   │   │   │   │   klass,                                              
+    334 │   │   │   │   │   stacklevel=find_stack_level(),                      
+    335 │   │   │   │   )                                                       
+  ❱ 336 │   │   │   return func(*args, **kwargs)                                
+    337 │   │                                                                   
+    338 │   │   # error: "Callable[[VarArg(Any), KwArg(Any)], Any]" has no      
+    339 │   │   # attribute "__signature__"                                     
+                                                                                
+  /home/adminuser/venv/lib/python3.14/site-packages/pandas/core/series.py:7873  
+  in max                                                                        
+                                                                                
+    7870 │   │   >>> s.max()                                                    
+    7871 │   │   8                                                              
+    7872 │   │   """                                                            
+  ❱ 7873 │   │   return NDFrame.max(                                            
+    7874 │   │   │   self, axis=axis, skipna=skipna, numeric_only=numeric_only  
+    7875 │   │   )                                                              
+    7876                                                                        
+                                                                                
+  /home/adminuser/venv/lib/python3.14/site-packages/pandas/core/generic.py:118  
+  14 in max                                                                     
+                                                                                
+    11811 │   │   numeric_only: bool = False,                                   
+    11812 │   │   **kwargs,                                                     
+    11813 │   ):                                                                
+  ❱ 11814 │   │   return self._stat_function(                                   
+    11815 │   │   │   "max",                                                    
+    11816 │   │   │   nanops.nanmax,                                            
+    11817 │   │   │   axis,                                                     
+                                                                                
+  /home/adminuser/venv/lib/python3.14/site-packages/pandas/core/generic.py:117  
+  85 in _stat_function                                                          
+                                                                                
+    11782 │   │                                                                 
+    11783 │   │   validate_bool_kwarg(skipna, "skipna", none_allowed=False)     
+    11784 │   │                                                                 
+  ❱ 11785 │   │   return self._reduce(                                          
+    11786 │   │   │   func, name=name, axis=axis, skipna=skipna, numeric_only=  
+    11787 │   │   )                                                             
+    11788                                                                       
+                                                                                
+  /home/adminuser/venv/lib/python3.14/site-packages/pandas/core/series.py:7494  
+  in _reduce                                                                    
+                                                                                
+    7491 │   │   │   │   │   f"Series.{name} does not allow {kwd_name}={numeri  
+    7492 │   │   │   │   │   "with non-numeric dtypes."                         
+    7493 │   │   │   │   )                                                      
+  ❱ 7494 │   │   │   result = op(delegate, skipna=skipna, **kwds)               
+    7495 │   │                                                                  
+    7496 │   │   result = maybe_unbox_numpy_scalar(result)                      
+    7497 │   │   return result                                                  
+                                                                                
+  /home/adminuser/venv/lib/python3.14/site-packages/pandas/core/nanops.py:149   
+  in f                                                                          
+                                                                                
+     146 │   │   │   │   else:                                                  
+     147 │   │   │   │   │   result = alt(values, axis=axis, skipna=skipna, **  
+     148 │   │   │   else:                                                      
+  ❱  149 │   │   │   │   result = alt(values, axis=axis, skipna=skipna, **kwds  
+     150 │   │   │                                                              
+     151 │   │   │   return result                                              
+     152                                                                        
+                                                                                
+  /home/adminuser/venv/lib/python3.14/site-packages/pandas/core/nanops.py:408   
+  in new_func                                                                   
+                                                                                
+     405 │   │   if datetimelike and mask is None:                              
+     406 │   │   │   mask = isna(values)                                        
+     407 │   │                                                                  
+  ❱  408 │   │   result = func(values, axis=axis, skipna=skipna, mask=mask, **  
+     409 │   │                                                                  
+     410 │   │   if datetimelike:                                               
+     411 │   │   │   result = _wrap_results(result, orig_values.dtype, fill_va  
+                                                                                
+  /home/adminuser/venv/lib/python3.14/site-packages/pandas/core/nanops.py:1115  
+  in reduction                                                                  
+                                                                                
+    1112 │   │   values, mask = _get_values(                                    
+    1113 │   │   │   values, skipna, fill_value_typ=fill_value_typ, mask=mask   
+    1114 │   │   )                                                              
+  ❱ 1115 │   │   result = getattr(values, meth)(axis)                           
+    1116 │   │   result = _maybe_null_out(                                      
+    1117 │   │   │   result, axis, mask, values.shape, datetimelike=dtype.kind  
+    1118 │   │   )                                                              
+                                                                                
+  /home/adminuser/venv/lib/python3.14/site-packages/numpy/_core/_methods.py:41  
+  in _amax                                                                      
+                                                                                
+     38 # small reductions                                                      
+     39 def _amax(a, axis=None, out=None, keepdims=False,                       
+     40 │   │     initial=_NoValue, where=True):                                
+  ❱  41 │   return umr_maximum(a, axis, None, out, keepdims, initial, where)    
+     42                                                                         
+     43 def _amin(a, axis=None, out=None, keepdims=False,                       
+     44 │   │     initial=_NoValue, where=True):                                
+                                                                                
+  in pandas._libs.tslibs.timestamps._Timestamp.__richcmp__:492                  
+────────────────────────────────────────────────────────────────────────────────
+TypeError: Cannot compare Timestamp with datetime.date. Use ts == 
+pd.Timestamp(date) or ts.date() == date instead.

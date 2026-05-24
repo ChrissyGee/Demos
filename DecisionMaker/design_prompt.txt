@@ -1,0 +1,57 @@
+You are an expert Streamlit developer. Build a complete, self-contained Streamlit MVP for a Decision Tracking & Analysis System.
+Goal
+The application helps companies track and analyze where decisions are actually being made by logging key decisions and using AI to monitor and analyze them.
+Core Features
+Sidebar Navigation
+
+First option (default): Decision Logging
+Second option: Reports & Analysis
+
+1. Decision Logging Tab (Main View)
+
+A clean, easy-to-use form that users fill out every time a decision is made:
+Who made the decision (dropdown or text input + option to add new people)
+What the decision was (textarea)
+Why the decision was made (textarea)
+Date/Time (auto-filled, editable)
+Optional: Department / Area / Impact Level (Low/Medium/High)
+
+Submit button to save the decision to the database.
+AI Monitoring Section (on the same page or collapsible section):
+Button: "Start AI Server Monitor" (simulated)
+The AI should simulate monitoring company activity and automatically log decisions when it "detects" them.
+Display a log of AI-detected decisions with the ability to review/edit before saving.
+
+
+2. Reports & Analysis Tab
+
+Display a summary dashboard of all logged decisions.
+AI Analysis:
+Button: "Run AI Analysis" — The AI analyzes all logged decisions to determine where decisions are actually being made (who makes the most, which departments, patterns, bottlenecks, etc.).
+Generate insights and visualizations.
+
+PDF Report Generation:
+Button to generate a professional PDF report.
+The report should include: decision logs, key metrics, AI insights, and visualizations.
+PDF must be viewable in the app and downloadable.
+
+
+Technical Requirements
+
+Use session state or SQLite for data persistence (in-memory is acceptable for MVP).
+Simulate AI monitoring and analysis (no real server access needed — use mock data and logic).
+The AI agent can use predefined tools or dynamically create simple analysis functions.
+Clean, professional, modern UI.
+Excellent error handling with clear user messages.
+Well-commented code with simple, readable functions (one major responsibility per function).
+Include basic unit tests (pytest) for key functions like decision validation, report generation, and analysis.
+
+Tech Stack (all in one file for MVP):
+
+Streamlit
+Pandas for data handling
+Plotly or Matplotlib for visualizations
+reportlab or fpdf2 for PDF generation
+Simple authentication simulation (toggle between User mode and Admin/AI mode)
+
+Please output the complete, ready-to-run Streamlit Python code with clear section comments separating each major feature.

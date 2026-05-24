@@ -72,8 +72,13 @@ from typing import Optional, List, Dict, Tuple
 import streamlit as st
 
 # api_client lives one directory up from this demo.
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-import api_client  # noqa: E402
+try:
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+    import api_client  # noqa: E402
+    _API_CLIENT_AVAILABLE = True
+except Exception:
+    api_client = None  # type: ignore[assignment]
+    _API_CLIENT_AVAILABLE = False
 
 # OpenAI is optional — the app works without it.
 try:
@@ -819,7 +824,7 @@ def step_upload() -> None:
 
     with c2:
         st.markdown("**No files handy?**")
-        if st.button("Load demo files", use_container_width=True):
+        if st.button("Load demo files", width='stretch'):
             st.session_state.original_files = dict(DEMO_FILES)
             st.success(f"Loaded {len(DEMO_FILES)} demo file(s).")
             st.rerun()
@@ -832,7 +837,7 @@ def step_upload() -> None:
                 st.code(code, language="python")
 
         st.divider()
-        if st.button("Continue to Analyze →", type="primary", use_container_width=True):
+        if st.button("Continue to Analyze →", type="primary", width='stretch'):
             st.session_state.step = 2
             st.rerun()
 
@@ -849,7 +854,7 @@ def step_analyze() -> None:
         value=False,
     )
 
-    if st.button("🔎 Run analysis", type="primary", use_container_width=True):
+    if st.button("🔎 Run analysis", type="primary", width='stretch'):
         with st.spinner("Analyzer agent working..."):
             findings = analyze_all(st.session_state.original_files)
             st.session_state.findings = findings
@@ -894,7 +899,7 @@ def step_analyze() -> None:
                     st.markdown(notes)
 
         st.divider()
-        if st.button("Continue to Review →", type="primary", use_container_width=True):
+        if st.button("Continue to Review →", type="primary", width='stretch'):
             st.session_state.step = 3
             st.rerun()
 
@@ -936,10 +941,10 @@ def step_review() -> None:
     st.info(f"{approved_count} / {total} findings approved for auto-fix.")
 
     c1, c2 = st.columns(2)
-    if c1.button("← Back to Analyze", use_container_width=True):
+    if c1.button("← Back to Analyze", width='stretch'):
         st.session_state.step = 2
         st.rerun()
-    if c2.button("Apply Approved Fixes →", type="primary", use_container_width=True):
+    if c2.button("Apply Approved Fixes →", type="primary", width='stretch'):
         st.session_state.step = 4
         st.rerun()
 
@@ -983,14 +988,14 @@ def step_apply() -> None:
 
     st.divider()
     c1, c2, c3 = st.columns([1, 1, 1])
-    if c1.button("← Back to Review", use_container_width=True):
+    if c1.button("← Back to Review", width='stretch'):
         st.session_state.hardened_files = {}
         st.session_state.step = 3
         st.rerun()
-    if c2.button("Re-apply (clear cache)", use_container_width=True):
+    if c2.button("Re-apply (clear cache)", width='stretch'):
         st.session_state.hardened_files = {}
         st.rerun()
-    if c3.button("Run in Sandbox →", type="primary", use_container_width=True):
+    if c3.button("Run in Sandbox →", type="primary", width='stretch'):
         st.session_state.step = 5
         st.rerun()
 
@@ -1005,7 +1010,7 @@ def step_sandbox() -> None:
         st.warning("No hardened code yet — go back to Step 4.")
         return
 
-    if st.button("🧪 Run evaluation loop", type="primary", use_container_width=True):
+    if st.button("🧪 Run evaluation loop", type="primary", width='stretch'):
         with st.spinner("Running in sandbox..."):
             st.session_state.sandbox_results = evaluation_loop(
                 st.session_state.hardened_files
@@ -1044,10 +1049,10 @@ def step_sandbox() -> None:
 
     st.divider()
     c1, c2 = st.columns(2)
-    if c1.button("← Back to Apply", use_container_width=True):
+    if c1.button("← Back to Apply", width='stretch'):
         st.session_state.step = 4
         st.rerun()
-    if c2.button("Continue to Download →", type="primary", use_container_width=True):
+    if c2.button("Continue to Download →", type="primary", width='stretch'):
         st.session_state.step = 6
         st.rerun()
 
@@ -1073,7 +1078,7 @@ def step_download() -> None:
             "Lines (after)":  len(after.splitlines()),
             "Lines added":    changes,
         })
-    st.dataframe(summary_rows, hide_index=True, use_container_width=True)
+    st.dataframe(summary_rows, hide_index=True, width='stretch')
 
     bundle_bytes = build_bundle(st.session_state.hardened_files)
     st.download_button(
@@ -1082,7 +1087,7 @@ def step_download() -> None:
         file_name=f"hardened_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
         mime="text/plain",
         type="primary",
-        use_container_width=True,
+        width='stretch',
     )
 
     st.divider()
@@ -1122,7 +1127,7 @@ def render_sidebar() -> None:
         st.divider()
         st.markdown("### 🧭 Wizard navigation")
         for i, (label, _desc) in enumerate(WIZARD_STEPS, 1):
-            if st.button(f"{i}. {label}", use_container_width=True,
+            if st.button(f"{i}. {label}", width='stretch',
                          key=f"nav_{i}",
                          type=("primary" if i == st.session_state.step else "secondary")):
                 st.session_state.step = i
@@ -1130,7 +1135,7 @@ def render_sidebar() -> None:
 
         st.divider()
         st.markdown("### 🧠 Console")
-        if st.button("Clear console", use_container_width=True):
+        if st.button("Clear console", width='stretch'):
             st.session_state.console = []
             st.rerun()
         with st.container(height=300):

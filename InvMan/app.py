@@ -607,7 +607,7 @@ def render_dashboard() -> None:
 
     # --- Agent controls -------------------------------------------------
     cc1, cc2, cc3 = st.columns([1, 1, 2])
-    if cc1.button("▶ Run Lead Agent Tick", type="primary", use_container_width=True):
+    if cc1.button("▶ Run Lead Agent Tick", type="primary", width='stretch'):
         lead_agent_tick()
         st.rerun()
 
@@ -615,7 +615,7 @@ def render_dashboard() -> None:
                       help="When on, the Lead Agent runs every time the page reruns.")
     st.session_state.auto_tick = auto
 
-    if cc3.button("🔄 Reset Simulation", use_container_width=True):
+    if cc3.button("🔄 Reset Simulation", width='stretch'):
         for k in list(st.session_state.keys()):
             del st.session_state[k]
         st.rerun()
@@ -633,7 +633,7 @@ def render_dashboard() -> None:
                    for c in display.columns],
         axis=1,
     ).format({"unit_cost": "${:.2f}", "price": "${:.2f}"})
-    st.dataframe(styled, use_container_width=True, hide_index=True)
+    st.dataframe(styled, hide_index=True)
 
     # --- Demand chart for a selected SKU --------------------------------
     st.markdown("#### Demand History & Forecast")
@@ -644,7 +644,7 @@ def render_dashboard() -> None:
     forecast_total = forecast_demand(hist, horizon_days=7)
     forecast_daily = forecast_total / 7.0
     future_dates = pd.date_range(
-        start=hist["date"].max() + timedelta(days=1), periods=7
+        start=pd.to_datetime(hist["date"]).max() + timedelta(days=1), periods=7
     )
     forecast_df = pd.DataFrame({
         "date": future_dates,
@@ -654,7 +654,7 @@ def render_dashboard() -> None:
     hist["kind"] = "actual"
     chart_df = pd.concat([hist[["date", "units_sold", "kind"]], forecast_df])
     chart_df = chart_df.pivot(index="date", columns="kind", values="units_sold")
-    st.line_chart(chart_df, use_container_width=True)
+    st.line_chart(chart_df)
 
 
 # ============================================================
@@ -792,7 +792,7 @@ def render_sidebar() -> None:
 
         st.divider()
         st.markdown("### ⚙️ Quick Controls")
-        if st.button("Run Tick", use_container_width=True):
+        if st.button("Run Tick", width='stretch'):
             lead_agent_tick()
             st.rerun()
 

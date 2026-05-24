@@ -12,11 +12,14 @@ log() calls succeed without AttributeError.
 
 import os
 import sys
+import importlib.util
 import pytest
 from unittest.mock import MagicMock, patch
 
 # ---------------------------------------------------------------------------
-# Mock streamlit before importing app
+# Mock streamlit before importing app.
+# Use importlib so the module is loaded as 'vibe_app' and does not collide
+# with other 'app' modules when the full test suite runs together.
 # ---------------------------------------------------------------------------
 _st = MagicMock()
 _st.session_state = MagicMock()
@@ -29,8 +32,11 @@ _mock_api = MagicMock()
 _mock_api.check_syntax.return_value = {"is_valid": True, "errors": []}
 sys.modules["api_client"] = _mock_api
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-import app  # noqa: E402
+_app_path = os.path.join(os.path.dirname(__file__), "..", "app.py")
+_spec = importlib.util.spec_from_file_location("vibe_app", _app_path)
+app = importlib.util.module_from_spec(_spec)
+sys.modules["vibe_app"] = app
+_spec.loader.exec_module(app)
 
 
 # ---------------------------------------------------------------------------

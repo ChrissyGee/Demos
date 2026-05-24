@@ -1,0 +1,41 @@
+Instructions:
+
+Locate and work in these two folders:
+DecisionMaker
+PayrollTimeEntry
+
+Build / Update the applications using the design prompts we previously created:
+For PayrollTimeEntry: Use the Payroll Manager / Time Entry Agent prompt (Employer + Employee portals, time tracking, approvals, PDF reports, AI agent validation).
+For DecisionMaker: Use the Decision Tracking & Analysis System prompt (Decision logging form, AI monitoring, analysis, PDF reports).
+Make sure each app is a complete, self-contained Streamlit application.
+After building:
+Review the code in both projects for quality, structure, and best practices.
+Add comprehensive graceful error handling throughout (try/except blocks with clear user-friendly messages, no app crashes).
+Ensure code is well-commented and uses simple, focused functions.
+
+Testing Requirements:
+Run all unit tests in both DecisionMaker and PayrollTimeEntry folders.
+Fix any failing tests.
+Then test all folders in the current workspace:
+AIConsultant
+DocReviewAndGeneration
+ClaudeExcelPlugIn
+InvMan
+MarketingCampaign
+VibeCodeProductionizing
+(and any others present)
+
+Make sure none of the existing apps break when loaded or when their main processes are executed.
+
+Final Steps:
+Ensure both DecisionMaker and PayrollTimeEntry apps run successfully via streamlit run app.py (or equivalent main file).
+Provide a summary of what was built, fixed, or improved.
+List any remaining issues or recommendations.
+
+
+Important:
+
+Work carefully and methodically.
+Do not delete or overwrite files unless necessary.
+Prioritize stability and graceful error handling across all projects.
+Use session state for data persistence where needed.

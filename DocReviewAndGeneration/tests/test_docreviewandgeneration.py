@@ -12,11 +12,14 @@ real list so log() calls succeed.
 import io
 import os
 import sys
+import importlib.util
 import pytest
 from unittest.mock import MagicMock
 
 # ---------------------------------------------------------------------------
-# Mock streamlit before importing app
+# Mock streamlit before importing app.
+# Use importlib so the module is loaded as 'docreview_app' and does not
+# collide with other 'app' modules when the full test suite runs together.
 # ---------------------------------------------------------------------------
 _st = MagicMock()
 _st.session_state = MagicMock()
@@ -26,8 +29,11 @@ _st.session_state.live_doc = ""
 _st.session_state.get = MagicMock(return_value="")
 sys.modules["streamlit"] = _st
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-import app  # noqa: E402
+_app_path = os.path.join(os.path.dirname(__file__), "..", "app.py")
+_spec = importlib.util.spec_from_file_location("docreview_app", _app_path)
+app = importlib.util.module_from_spec(_spec)
+sys.modules["docreview_app"] = app
+_spec.loader.exec_module(app)
 
 
 # ---------------------------------------------------------------------------

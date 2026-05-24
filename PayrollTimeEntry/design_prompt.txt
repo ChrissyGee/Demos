@@ -1,0 +1,61 @@
+You are an expert Streamlit developer. Build a complete, self-contained Streamlit MVP for a Payroll Manager application based on the following architecture and requirements.
+Architecture (Reference)
+[Include the full image description or attach the diagram IMG_0581.jpg here when using Claude]
+Key Flow:
+
+Employer enters employee information (name, allowed hours, etc.) → stored in Central DB.
+Employee enters their time entry information.
+AI Agent acts as the first line of defense (cross-checks employee entries against employer-defined rules).
+Employer is the final approver.
+
+Core Idea:
+Employer sets up payroll information that gets uploaded to a database. The system creates/uses profiles. Employee time entries are checked against employer data. When authorized, an AI agent processes the DB and generates PDF reports with useful metrics (average hours worked, top performers, lower performers, etc.) at individual and aggregate levels. Employer can view individual data and approve time entries (individual or bulk for a time period).
+Requirements
+1. Sidebar Navigation
+
+First option: Employer Dashboard (default view when app loads)
+Second option: Employee Portal
+
+2. Employer Dashboard (First Sidebar Option)
+
+Tab 1: Employee Setup
+Form to enter new employee: Name, Employee ID, Allowed hours per month/week, other relevant info.
+Submit button stores data.
+
+Tab 2: Time Entry Review & Approval
+Table showing all employees and their submitted hours for the current month.
+Search/filter by employee name.
+For each employee: button to Approve their time entries.
+Global "Approve All" button for the month.
+Button to generate and open PDF Report showing daily breakdown + metrics (average hours, top/bottom performers, etc.).
+Chat interface (sidebar or bottom bar) where employer can ask questions about any employee/time entries (AI-powered).
+
+
+3. Employee Portal (Second Sidebar Option)
+
+Tab 1: Time Entry
+Weekly time entry form for the current month (easy-to-use interface, e.g. date picker + hours worked per day).
+Submit button.
+
+Tab 2: Pay Stubs
+List of generated pay stub PDFs (mock for now).
+
+
+Additional Requirements:
+
+Use session state for data persistence within the app (SQLite or in-memory for MVP).
+Professional, clean, modern UI.
+Excellent error handling with user-friendly messages.
+Well-commented, clean, modular code: one function per major tool/feature.
+Include basic unit tests (using pytest) for key functions.
+AI Agent simulation: When employee submits time, the system should validate against employer limits and flag discrepancies.
+PDF generation: Use reportlab or fpdf2 to generate professional reports and pay stubs.
+
+Tech Stack (all in one file for MVP):
+
+Streamlit
+Pandas for data handling
+PDF generation library
+Basic authentication simulation (simple login selector: Employer / Employee)
+
+Please output the complete, ready-to-run Streamlit Python code with clear section comments.
