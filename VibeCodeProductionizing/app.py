@@ -61,6 +61,7 @@ USAGE
 # ============================================================
 # IMPORTS
 # ============================================================
+import ast
 import os
 import re
 import io
@@ -70,15 +71,6 @@ from datetime import datetime
 from typing import Optional, List, Dict, Tuple
 
 import streamlit as st
-
-# api_client lives one directory up from this demo.
-try:
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-    import api_client  # noqa: E402
-    _API_CLIENT_AVAILABLE = True
-except Exception:
-    api_client = None  # type: ignore[assignment]
-    _API_CLIENT_AVAILABLE = False
 
 # OpenAI is optional — the app works without it.
 try:
@@ -378,18 +370,13 @@ def _rule_missing_logging_import(filename: str, code: str) -> List[Dict]:
 def _rule_ast_syntax(filename: str, code: str) -> List[Dict]:
     """Make sure the file parses — broken code shouldn't proceed."""
     try:
-        result = api_client.check_syntax(code)
-        if result.get("is_valid", True):
-            return []
-        errors = result.get("errors", [])
-        msg = errors[0] if errors else "Syntax error detected"
-        return [_finding(
-            filename, "syntax-error", "critical", 1,
-            f"SyntaxError: {msg}", "reliability", "Cannot auto-fix"
-        )]
-    except Exception:
-        # If the API is unreachable, skip the syntax check rather than block analysis.
+        ast.parse(code)
         return []
+    except SyntaxError as e:
+        return [_finding(
+            filename, "syntax-error", "critical", e.lineno or 1,
+            f"SyntaxError: {e.msg}", "reliability", "Cannot auto-fix"
+        )]
 
 
 ALL_RULES = [
@@ -596,12 +583,12 @@ def apply_fixes(files: Dict[str, str], approved: List[Dict]) -> Dict[str, str]:
     # Final syntax-safety pass.
     for fname, code in out.items():
         try:
-            result = api_client.check_syntax(code)
-            valid = result.get("is_valid", True)
-            error_msg = (result.get("errors") or ["unknown error"])[0]
-        except Exception:
-            valid = True  # don't block apply if API is unreachable
+            ast.parse(code)
+            valid = True
             error_msg = ""
+        except SyntaxError as e:
+            valid = False
+            error_msg = e.msg
         if not valid:
             log("Apply",
                 f"⚠ Transformed {fname} no longer parses ({error_msg}) — reverting.")

@@ -1,10 +1,8 @@
 """
 Unit tests for VibeCodeProductionizing/app.py.
 
-The rule-based analyzer and all transforms are fully deterministic. The
-api_client.check_syntax call in _rule_ast_syntax and apply_fixes is patched
-to avoid real network requests (the patched version returns {"is_valid": True}
-by default, simulating valid code).
+The rule-based analyzer and all transforms are fully deterministic.
+Syntax checking uses Python's built-in ast.parse — no network calls.
 
 Streamlit is mocked before import. st.session_state.console is a real list so
 log() calls succeed without AttributeError.
@@ -26,11 +24,6 @@ _st.session_state = MagicMock()
 _st.session_state.console = []
 _st.session_state.get = MagicMock(return_value="")
 sys.modules["streamlit"] = _st
-
-# Patch api_client so tests don't make real HTTP calls.
-_mock_api = MagicMock()
-_mock_api.check_syntax.return_value = {"is_valid": True, "errors": []}
-sys.modules["api_client"] = _mock_api
 
 _app_path = os.path.join(os.path.dirname(__file__), "..", "app.py")
 _spec = importlib.util.spec_from_file_location("vibe_app", _app_path)
@@ -209,24 +202,16 @@ class TestRuleMissingLoggingImport:
 class TestRuleAstSyntax:
 
     def test_valid_code_returns_no_findings(self):
-        _mock_api.check_syntax.return_value = {"is_valid": True, "errors": []}
         assert app._rule_ast_syntax("f.py", CLEAN_CODE) == []
 
     def test_invalid_code_returns_syntax_error_finding(self):
-        _mock_api.check_syntax.return_value = {
-            "is_valid": False, "errors": ["invalid syntax"]
-        }
         findings = app._rule_ast_syntax("f.py", "def (")
         assert len(findings) == 1
         assert findings[0]["rule"] == "syntax-error"
         assert findings[0]["severity"] == "critical"
 
-    def test_api_failure_returns_no_findings(self):
-        _mock_api.check_syntax.side_effect = Exception("network error")
-        result = app._rule_ast_syntax("f.py", "some code")
-        assert result == []
-        _mock_api.check_syntax.side_effect = None  # reset
-        _mock_api.check_syntax.return_value = {"is_valid": True, "errors": []}
+    def test_valid_simple_expression_no_findings(self):
+        assert app._rule_ast_syntax("f.py", "x = 1 + 2") == []
 
 
 # ---------------------------------------------------------------------------
@@ -253,7 +238,6 @@ class TestAnalyzeFile:
 
     def setup_method(self):
         _reset_console()
-        _mock_api.check_syntax.return_value = {"is_valid": True, "errors": []}
 
     def test_demo_secrets_py_has_findings(self):
         findings = app.analyze_file("secrets.py", app.DEMO_FILES["secrets.py"])
@@ -271,7 +255,6 @@ class TestAnalyzeAll:
 
     def setup_method(self):
         _reset_console()
-        _mock_api.check_syntax.return_value = {"is_valid": True, "errors": []}
 
     def test_processes_all_files(self):
         findings = app.analyze_all(app.DEMO_FILES)
@@ -385,7 +368,6 @@ class TestApplyFixes:
 
     def setup_method(self):
         _reset_console()
-        _mock_api.check_syntax.return_value = {"is_valid": True, "errors": []}
 
     def _get_findings(self, filename, code):
         return [f for f in app.analyze_file(filename, code)
@@ -408,14 +390,14 @@ class TestApplyFixes:
         assert result["f.py"] == DEMO_CODE
 
     def test_syntax_invalid_output_gets_reverted(self):
-        _mock_api.check_syntax.return_value = {
-            "is_valid": False, "errors": ["bad syntax"]
-        }
-        code = 'print("x")'
-        finding = app._rule_print_debug("f.py", code)[0]
-        result = app.apply_fixes({"f.py": code}, [finding])
+        err = SyntaxError("bad syntax")
+        err.lineno = 1
+        err.msg = "bad syntax"
+        with patch("ast.parse", side_effect=err):
+            code = 'print("x")'
+            finding = app._rule_print_debug("f.py", code)[0]
+            result = app.apply_fixes({"f.py": code}, [finding])
         assert "TODO(hardening)" in result["f.py"]
-        _mock_api.check_syntax.return_value = {"is_valid": True, "errors": []}
 
 
 # ---------------------------------------------------------------------------
