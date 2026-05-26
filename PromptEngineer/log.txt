@@ -1,0 +1,68 @@
+[15:55:27] 📦 Processed dependencies!
+
+cat: /mount/admin/install_path: No such file or directory
+
+2026-05-26 15:55:30.500 Uvicorn server started on 0.0.0.0:8501
+
+
+
+
+2026-05-26 15:55:36.303 Uncaught app execution
+
+Traceback (most recent call last):
+
+  File "/home/adminuser/venv/lib/python3.14/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 129, in exec_func_with_error_handling
+
+    result = func()
+
+  File "/home/adminuser/venv/lib/python3.14/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 689, in code_to_exec
+
+    exec(code, module.__dict__)  # noqa: S102
+
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^
+
+  File "/mount/src/demos/PromptEngineer/app.py", line 44, in <module>
+
+    import stripe
+
+ModuleNotFoundError: No module named 'stripe'
+
+2026-05-26 15:55:42.636 Uncaught app execution
+
+Traceback (most recent call last):
+
+  File "/home/adminuser/venv/lib/python3.14/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 129, in exec_func_with_error_handling
+
+    result = func()
+
+  File "/home/adminuser/venv/lib/python3.14/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 689, in code_to_exec
+
+    exec(code, module.__dict__)  # noqa: S102
+
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^
+
+  File "/mount/src/demos/PromptEngineer/app.py", line 44, in <module>
+
+    import stripe
+
+ModuleNotFoundError: No module named 'stripe'
+
+2026-05-26 15:55:44.377 Uncaught app execution
+
+Traceback (most recent call last):
+
+  File "/home/adminuser/venv/lib/python3.14/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 129, in exec_func_with_error_handling
+
+    result = func()
+
+  File "/home/adminuser/venv/lib/python3.14/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 689, in code_to_exec
+
+    exec(code, module.__dict__)  # noqa: S102
+
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^
+
+  File "/mount/src/demos/PromptEngineer/app.py", line 44, in <module>
+
+    import stripe
+
+ModuleNotFoundError: No module named 'stripe'
