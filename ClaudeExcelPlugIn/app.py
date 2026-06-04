@@ -11,13 +11,9 @@ can be dropped on any AI consulting website as a demo or be embedded into
 a client onboarding portal.
 
 PAGES
-    * Sidebar mode switch:
-        - "Text Explanations" (default) — tabs covering Overview, Individual
-          install, Business / Admin deployment, Post-install usage, and
-          Best Practices & Limitations. Includes a persistent checklist
-          users can tick as they go.
-        - "Video Setup Guide" — curated public videos plus a written
-          summary of what each video covers.
+    * Tabs covering Overview, Individual install, Business / Admin deployment,
+      Post-install usage, and Best Practices & Limitations. Includes a
+      persistent checklist users can tick as they go.
 
 CONTENT
     The setup steps reflect the current Microsoft Office add-in deployment
@@ -555,84 +551,84 @@ def render_best_practices_tab() -> None:
 # generally available walkthroughs and provide a written summary so the
 # section is still useful if the embed fails or is blocked by a firewall.
 
-RECOMMENDED_VIDEOS: List[Dict[str, str]] = [
-    {
-        "title": "Official Anthropic — Claude for Excel announcement",
-        "url": "https://www.youtube.com/results?search_query=Claude+for+Excel+Anthropic",
-        "covers": "What the add-in is, the pane UX, and the first-run flow.",
-    },
-    {
-        "title": "Microsoft 365 — Deploying third-party Office add-ins",
-        "url": "https://www.youtube.com/results?search_query=Microsoft+365+admin+center+deploy+office+add-in",
-        "covers": "Generic Microsoft 365 Admin Center walkthrough — applies "
-                  "directly to deploying Claude.",
-    },
-    {
-        "title": "Community walkthrough — first 5 prompts to try in Claude for Excel",
-        "url": "https://www.youtube.com/results?search_query=Claude+Excel+prompt+examples",
-        "covers": "Practical prompts for analysis, formula generation, and "
-                  "data clean-up.",
-    },
-]
+# RECOMMENDED_VIDEOS: List[Dict[str, str]] = [
+#     {
+#         "title": "Official Anthropic — Claude for Excel announcement",
+#         "url": "https://www.youtube.com/results?search_query=Claude+for+Excel+Anthropic",
+#         "covers": "What the add-in is, the pane UX, and the first-run flow.",
+#     },
+#     {
+#         "title": "Microsoft 365 — Deploying third-party Office add-ins",
+#         "url": "https://www.youtube.com/results?search_query=Microsoft+365+admin+center+deploy+office+add-in",
+#         "covers": "Generic Microsoft 365 Admin Center walkthrough — applies "
+#                   "directly to deploying Claude.",
+#     },
+#     {
+#         "title": "Community walkthrough — first 5 prompts to try in Claude for Excel",
+#         "url": "https://www.youtube.com/results?search_query=Claude+Excel+prompt+examples",
+#         "covers": "Practical prompts for analysis, formula generation, and "
+#                   "data clean-up.",
+#     },
+# ]
 
-VIDEO_SUMMARY_POINTS: List[str] = [
-    "Verify your Claude plan tier and Excel version before installing.",
-    "For individuals: Home → Add-ins → Get Add-ins → search 'Claude' → Add.",
-    "Sign in via OAuth using the email tied to your Claude plan.",
-    "For admins: deploy via Microsoft 365 Admin Center → Integrated apps "
-    "→ Get apps (or upload custom manifest XML).",
-    "Allow up to 24 hours for tenant-wide deployments to propagate.",
-    "Pick a model in the pane — Sonnet 4.6 is the recommended default.",
-    "Always review formulas / overwrites before saving the workbook.",
-    "Treat any text inside cells as untrusted input — be alert to prompt "
-    "injection in narrative columns.",
-]
+# VIDEO_SUMMARY_POINTS: List[str] = [
+#     "Verify your Claude plan tier and Excel version before installing.",
+#     "For individuals: Home → Add-ins → Get Add-ins → search 'Claude' → Add.",
+#     "Sign in via OAuth using the email tied to your Claude plan.",
+#     "For admins: deploy via Microsoft 365 Admin Center → Integrated apps "
+#     "→ Get apps (or upload custom manifest XML).",
+#     "Allow up to 24 hours for tenant-wide deployments to propagate.",
+#     "Pick a model in the pane — Sonnet 4.6 is the recommended default.",
+#     "Always review formulas / overwrites before saving the workbook.",
+#     "Treat any text inside cells as untrusted input — be alert to prompt "
+#     "injection in narrative columns.",
+# ]
 
 
-def render_video_mode() -> None:
-    """Render the dedicated video setup guide page."""
-    st.subheader("🎥 Video Setup Guide")
-    st.markdown(
-        """
-        Prefer to watch someone walk through the install? Use the curated
-        videos below. In a production deployment of this guide, the player
-        on the left would embed your organization's official walkthrough.
-        """
-    )
-
-    col_player, col_summary = st.columns([3, 2])
-
-    with col_player:
-        st.markdown("#### Featured walkthrough")
-        # Placeholder video. In production, swap for the org's hosted video.
-        # We use a well-known evergreen Microsoft demo as a stand-in.
-        try:
-            st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
-            st.caption("Placeholder — replace with your hosted setup video in production.")
-        except Exception:
-            st.info(
-                "Video embed unavailable in this environment. "
-                "Use the recommended links to the right to watch on YouTube."
-            )
-
-    with col_summary:
-        st.markdown("#### Key points covered")
-        for i, point in enumerate(VIDEO_SUMMARY_POINTS, 1):
-            st.markdown(f"**{i}.** {point}")
-
-    st.divider()
-    st.markdown("#### 📚 Recommended videos")
-    for v in RECOMMENDED_VIDEOS:
-        with st.container(border=True):
-            st.markdown(f"**{v['title']}**")
-            st.markdown(v["covers"])
-            st.link_button("Open on YouTube", v["url"], use_container_width=False)
-
-    st.info(
-        "**Note:** This video section is a demo. In a production deployment of this "
-        "guide, embed the official Anthropic walkthrough using `st.video(...)` "
-        "with your hosted URL."
-    )
+# def render_video_mode() -> None:
+#     """Render the dedicated video setup guide page."""
+#     st.subheader("🎥 Video Setup Guide")
+#     st.markdown(
+#         """
+#         Prefer to watch someone walk through the install? Use the curated
+#         videos below. In a production deployment of this guide, the player
+#         on the left would embed your organization's official walkthrough.
+#         """
+#     )
+#
+#     col_player, col_summary = st.columns([3, 2])
+#
+#     with col_player:
+#         st.markdown("#### Featured walkthrough")
+#         # Placeholder video. In production, swap for the org's hosted video.
+#         # We use a well-known evergreen Microsoft demo as a stand-in.
+#         try:
+#             st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+#             st.caption("Placeholder — replace with your hosted setup video in production.")
+#         except Exception:
+#             st.info(
+#                 "Video embed unavailable in this environment. "
+#                 "Use the recommended links to the right to watch on YouTube."
+#             )
+#
+#     with col_summary:
+#         st.markdown("#### Key points covered")
+#         for i, point in enumerate(VIDEO_SUMMARY_POINTS, 1):
+#             st.markdown(f"**{i}.** {point}")
+#
+#     st.divider()
+#     st.markdown("#### 📚 Recommended videos")
+#     for v in RECOMMENDED_VIDEOS:
+#         with st.container(border=True):
+#             st.markdown(f"**{v['title']}**")
+#             st.markdown(v["covers"])
+#             st.link_button("Open on YouTube", v["url"], use_container_width=False)
+#
+#     st.info(
+#         "**Note:** This video section is a demo. In a production deployment of this "
+#         "guide, embed the official Anthropic walkthrough using `st.video(...)` "
+#         "with your hosted URL."
+#     )
 
 
 # ============================================================
@@ -755,27 +751,22 @@ def render_text_mode() -> None:
 # SIDEBAR
 # ============================================================
 
-def render_sidebar() -> str:
-    """
-    Render the sidebar and return the selected guide mode.
-
-    The mode toggle is the centerpiece — every other panel in the sidebar
-    is decorative / informational.
-    """
+def render_sidebar() -> None:
+    """Render the sidebar."""
     with st.sidebar:
         st.markdown("## 📊 Claude for Excel")
         st.caption("Interactive setup guide")
 
         st.divider()
-        st.markdown("### 🧭 Guide Mode")
-        mode = st.radio(
-            "Choose how you want to learn",
-            ["Text Explanations", "Video Setup Guide"],
-            index=0,
-            label_visibility="collapsed",
-        )
+        # st.markdown("### 🧭 Guide Mode")
+        # mode = st.radio(
+        #     "Choose how you want to learn",
+        #     ["Text Explanations", "Video Setup Guide"],
+        #     index=0,
+        #     label_visibility="collapsed",
+        # )
 
-        st.divider()
+        # st.divider()  # (divider below removed guide mode toggle)
         st.markdown("### 📌 Quick links")
         st.markdown(
             "- [Claude Help Center](https://support.anthropic.com)\n"
@@ -789,8 +780,6 @@ def render_sidebar() -> str:
             "This is a demo guide. For the latest official instructions, "
             "visit the **Claude Help Center**."
         )
-
-    return mode
 
 
 # ============================================================
@@ -816,15 +805,16 @@ def render_header() -> None:
 # ============================================================
 
 def main() -> None:
-    """Top-level entry point — wires the sidebar mode to the right page."""
+    """Top-level entry point."""
     init_session_state()
-    mode = render_sidebar()
+    render_sidebar()
     render_header()
 
-    if mode == "Text Explanations":
-        render_text_mode()
-    else:
-        render_video_mode()
+    render_text_mode()
+    # if mode == "Text Explanations":
+    #     render_text_mode()
+    # else:
+    #     render_video_mode()
 
     # Footer — kept minimal and trustworthy.
     st.divider()
